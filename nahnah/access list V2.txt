@@ -1,0 +1,28 @@
+tu gainteresebt ra davwere:
+
+router 0 ze
+
+Router>enable 
+Router#conf ter
+pirvel rigshi orive access list movxsnit (chvenit dawerili ufro martivi gasaketeblia)
+Router(config)#no access-list 10
+Router(config)#no access-list 15
+
+amis mere vamowmebt yvela host tan kavshirs am shemtxvevashi velas aq kavshiri
+
+shemdeg vqmnit axal access list 10_s da host 192.168.1.2 anu PC1 vukrdzalavt kavshirsh
+
+Router(config)#access-list 10 deny host 192.168.1.2
+
+amis mere access list 10 ze 192.168.1.0 qselshi chartul yvela host vadzlevt kavshiris uflebas
+
+Router(config)#access-list 10 permit 192.168.1.0 0.0.0.255 
+(kavshirisas wild mask unda subnetis magivrad (wild mask aris 255.255.255.255 gamoklebuli subnet mask 
+am shemtxvevashi 255.255.255.255 - 255.255.255.0 rac arsi 0.0.0.255))
+
+gamzadebul access list vuwert im interface romelzec 192.168.1.0 qselia charetuli am shemtxvevashi interface gigabitEthernet 0/2
+
+Router(config)#interface gigabitEthernet 0/2
+Router(config-if)#ip access-group 10 in
+
+ amsi mere yvel;aferi ise mushaobs rogorc pirobashia sheidzleba rame gamepara naxet mainc

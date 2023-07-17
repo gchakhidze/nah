@@ -1,0 +1,29 @@
+V4 troubleshoot
+
+marcxena routerze
+
+
+
+Router#conf ter
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#interface serial 0/0/0
+Router(config-if)#no ipv6 address 5000::1/64
+Router(config-if)#ipv6 address 4000::1/64
+Router(config-if)#
+Router(config-if)#
+
+marjvena routerze
+
+
+Router(config)#interface gigabitEthernet 0/0 
+Router(config-if)#no ipv6 rip TSU e
+Router(config-if)#no ipv6 rip TSU enable 
+Router(config-if)#ipv6 rip BTU e
+Router(config-if)#ipv6 rip BTU enable 
+Router(config-if)#
+
+meoreze zedmeti rip protocoli rcheba mara ar gvxtoven washlasmarto kavshiris dadgenas
+
+
+
+
