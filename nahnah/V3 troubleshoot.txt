@@ -1,7 +1,0 @@
-V3 troubleshoot 
-
-marcxema routers unda gauwerto es
-
-Router(config)#ip nat pool BTU 200.200.200.3 200.200.200.5 netmask 255.255.255.248
-Router(config)#access-list 3 permit any 
-Router(config)#ip nat inside source list 3 pool BTU
