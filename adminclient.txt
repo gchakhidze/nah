@@ -1,0 +1,75 @@
+To create an Admin Server for your existing Spring application, you can use Spring Boot Admin, which is a community project that provides a user interface to monitor and manage your Spring Boot applications. Here's how you can set it up:
+
+Step 1: Create a new Spring Boot Admin Server Application
+Create a new Spring Boot application that will act as your Admin Server. This application will be responsible for monitoring and managing your existing Spring application. You can use the Spring Initializr (start.spring.io) or your preferred IDE to create a new project with the necessary dependencies.
+
+Step 2: Add Dependencies and Configuration
+In your Admin Server application's `pom.xml`, add the following dependencies:
+
+```xml
+<dependency>
+    <groupId>de.codecentric</groupId>
+    <artifactId>spring-boot-admin-starter-server</artifactId>
+    <version>2.5.1</version>
+</dependency>
+```
+
+In the `application.properties` file of your Admin Server application, configure the server port and security settings:
+
+```properties
+server.port=8081
+
+# Enable Spring Security
+spring.security.user.name=admin
+spring.security.user.password=admin123
+```
+
+Step 3: Enable Admin Server
+Create a main class for your Admin Server application and annotate it with `@EnableAdminServer`:
+
+```java
+import de.codecentric.boot.admin.server.config.EnableAdminServer;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+@EnableAdminServer
+public class AdminServerApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(AdminServerApplication.class, args);
+    }
+}
+```
+
+Step 4: Configure Your Existing Application as a Client
+To enable your existing Spring application to be monitored by the Admin Server, you need to configure it as a client.
+
+In your existing application's `pom.xml`, add the following dependency:
+
+```xml
+<dependency>
+    <groupId>de.codecentric</groupId>
+    <artifactId>spring-boot-admin-starter-client</artifactId>
+    <version>2.5.1</version>
+</dependency>
+```
+
+In the `application.properties` file of your existing application, configure the Admin Server URL and security settings:
+
+```properties
+spring.boot.admin.client.url=http://localhost:8081
+spring.boot.admin.client.username=admin
+spring.boot.admin.client.password=admin123
+```
+
+Make sure to replace the URL (`http://localhost:8081`) with the appropriate URL where your Admin Server application is running.
+
+Step 5: Run Admin Server and Existing Application
+Start both the Admin Server and your existing application. The Admin Server will be accessible at `http://localhost:8081` (or the specified port) and will display the monitoring information of your existing application.
+
+By configuring your existing application as a client of the Admin Server, you will be able to monitor metrics, health checks, and other details of your application through the Admin Server's user interface.
+
+Note: Make sure to secure the Admin Server application and the communication between the Admin Server and client applications in a production environment by using appropriate security measures.
+
+That's it! You have created an Admin Server using Spring Boot Admin and configured your existing Spring application as a client to be monitored and managed by the Admin Server.
