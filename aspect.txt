@@ -1,0 +1,60 @@
+Certainly! You can use Aspect-Oriented Programming (AOP) to create logging for the `listCars` method with its parameters. Here's an example of how to achieve this:
+
+Step 1: Add AOP Dependency
+Make sure you have the necessary AOP dependency in your project's `pom.xml` file. Here's an example of the dependency:
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-aop</artifactId>
+</dependency>
+```
+
+Step 2: Create a Logging Aspect
+Create an aspect class that will handle the logging aspect. In this class, you can define pointcuts and advice to intercept the execution of the `listCars` method and log the parameters. Here's an example:
+
+```java
+import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
+import org.springframework.stereotype.Component;
+
+@Aspect
+@Component
+public class LoggingAspect {
+
+    @Before("execution(* com.example.MyController.listCars(..))")
+    public void logBeforeListCars(JoinPoint joinPoint) {
+        Object[] args = joinPoint.getArgs();
+        // Log the parameters or perform any desired logging operation
+        System.out.println("listCars method called with parameters: " + Arrays.toString(args));
+    }
+
+    @AfterReturning(pointcut = "execution(* com.example.MyController.listCars(..))", returning = "result")
+    public void logAfterListCars(JoinPoint joinPoint, Object result) {
+        // Log the result or perform any desired logging operation
+        System.out.println("listCars method executed successfully. Result: " + result);
+    }
+}
+```
+
+In this example, we created an aspect class `LoggingAspect` and defined two pointcuts: `logBeforeListCars()` and `logAfterListCars()`. The `logBeforeListCars()` method is executed before the `listCars` method, and it logs the method parameters. The `logAfterListCars()` method is executed after the `listCars` method and logs the result.
+
+Make sure to update the package and class names (`com.example.MyController`) according to your application's structure.
+
+Step 3: Enable Aspect Auto-Configuration
+In your Spring Boot application class, enable AspectJ auto-configuration by adding the `@EnableAspectJAutoProxy` annotation. For example:
+
+```java
+@SpringBootApplication
+@EnableAspectJAutoProxy
+public class YourApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(YourApplication.class, args);
+    }
+}
+```
+
+That's it! Now, whenever the `listCars` method is called, the logging aspect will intercept the method execution, log the parameters before execution, and log the result after execution. You can customize the logging operations in the aspect methods to suit your requirements.
