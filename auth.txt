@@ -1,0 +1,81 @@
+To configure security in your Java Spring application, you'll need to follow these steps:
+
+Step 1: Add Spring Security Dependency
+Make sure you have the necessary Spring Security dependencies in your project's `pom.xml` file. Here's an example of the dependency:
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-security</artifactId>
+</dependency>
+```
+
+Step 2: Create Security Configuration Class
+Create a class that extends `WebSecurityConfigurerAdapter` and override the `configure()` method. This class will be responsible for configuring security in your application. Here's an example:
+
+```java
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        // Configure your authentication provider
+        // For example, you can use in-memory authentication
+        auth
+            .inMemoryAuthentication()
+            .withUser("admin")
+            .password("{noop}admin123")
+            .roles("ADMIN");
+    }
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+            .authorizeRequests()
+                .antMatchers("/listCars").permitAll() // Allow access to listCars for all users
+                .antMatchers("/listParts").hasRole("ADMIN") // Require ADMIN role for listParts
+                .anyRequest().authenticated()
+                .and()
+            .formLogin()
+                .permitAll()
+                .and()
+            .logout()
+                .permitAll();
+    }
+}
+```
+
+In the example above, we configure in-memory authentication with a single user "admin" having the role "ADMIN". The `configure()` method defines the access rules for different URLs. The `/listCars` endpoint is accessible to all users (`permitAll()`), while the `/listParts` endpoint requires the user to have the "ADMIN" role (`hasRole("ADMIN")`).
+
+Step 3: Secure Controller Methods
+Annotate your controller methods with appropriate security annotations to enforce access control. Here's an example:
+
+```java
+@Controller
+public class MyController {
+
+    @GetMapping("/listCars")
+    public String listCars() {
+        // Code for listing cars
+    }
+
+    @GetMapping("/listParts")
+    public String listParts() {
+        // Code for listing parts
+    }
+}
+```
+
+In this example, the `listCars()` method can be accessed by all users since we allowed access to it in the security configuration. The `listParts()` method can only be accessed by users with the "ADMIN" role.
+
+Make sure to customize the authentication and authorization configuration based on your specific requirements and security provider (e.g., in-memory, database, LDAP, etc.).
+
+That's it! You've configured security in your Java Spring application to allow unauthorized users to access `listCars()` and restrict access to `listParts()` to users with the "ADMIN" role.
