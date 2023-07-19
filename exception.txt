@@ -1,0 +1,52 @@
+To create a custom exception class in your Java Spring application, you can follow these steps:
+
+Step 1: Create the Custom Exception Class
+Create a new class that extends the `RuntimeException` class or any other appropriate exception class based on your specific requirements. Here's an example:
+
+```java
+public class NoCarsFoundException extends RuntimeException {
+
+    public NoCarsFoundException(String message) {
+        super(message);
+    }
+}
+```
+
+In the example above, we've created a `NoCarsFoundException` class that extends `RuntimeException`. You can add additional constructors or methods as needed.
+
+Step 2: Handle the Custom Exception
+To handle the custom exception and provide a meaningful response to the user, you can use the `@ExceptionHandler` annotation in your controller or a dedicated exception handler class. Here's an example using the controller:
+
+```java
+@Controller
+public class MyController {
+
+    @Autowired
+    private CarService carService;
+
+    @GetMapping("/listCars")
+    public String listCars() {
+        List<Car> cars = carService.getCars();
+
+        if (cars.isEmpty()) {
+            throw new NoCarsFoundException("No cars found in the database.");
+        }
+
+        // Code for listing cars
+    }
+
+    // Exception handler for NoCarsFoundException
+    @ExceptionHandler(NoCarsFoundException.class)
+    public ResponseEntity<String> handleNoCarsFoundException(NoCarsFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+}
+```
+
+In this example, we throw the `NoCarsFoundException` if the `cars` list is empty. The `handleNoCarsFoundException()` method is annotated with `@ExceptionHandler(NoCarsFoundException.class)` to handle this specific exception. It returns an appropriate response using the `ResponseEntity` class, setting the HTTP status to `404 Not Found` and the response body to the exception message.
+
+You can customize the exception handler method further to handle the exception in different ways, such as returning a custom error object, redirecting to an error page, or logging the exception.
+
+Remember to replace `CarService` with your actual service class or data access layer that retrieves the car data.
+
+That's it! You have created a custom exception class and handled it in your controller to provide a meaningful response when no cars are found.
